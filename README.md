@@ -27,7 +27,7 @@ The SSH private key for the SFTP server. This key is used to authenticate the de
 You must ask a Rezoleo administrator to add your dedicated public key to your user on the server.
 
 > [!IMPORTANT] 
-> You must either provide a key, or a password, not both!
+> Only one authentication method is allowed: either `sftp-key` or `sftp-password`. Providing both will result in an error.
 
 ## Usage
 
@@ -50,7 +50,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Deploy to Rezoleo
-        uses: rezoleo/rezoleo-deploy-action@v1
+        uses: rezoleo/rezoleo-deploy-action@v2
         with:
           sftp-user: ${{ secrets.SFTP_USER }}
           # Use only one of the following lines :
@@ -63,13 +63,13 @@ jobs:
 You need to define the following secrets in your repository:
 
 - `SFTP_USER`: The username for the SFTP server.
-- `SFTP_PASSWORD`: The password for the SFTP server.
-- `SFTP_KEY`: The SSH private key for the SFTP server.
+- `SFTP_PASSWORD`: The password for the SFTP server. (if using password authentication)
+- `SFTP_KEY`: The SSH private key for the SFTP server. (if using key authentication)
 
 ## Notes
 
 - The SSH private key is written to a file named `id_rsa` during the deployment process.
-- Caution : The upload process will completely overwrite the content in the `writable` folder on the server, except the `.git` folder and what is included in the `.gitignore` file.
+- Caution: The upload process will completely overwrite the content in the `writable` folder on the server, except the `.git` folder and what is included in the `.gitignore` file.
 
 > [!WARNING] 
 > Include directives present in the `.gitignore` files (lines starting with `!`) are not respected!
